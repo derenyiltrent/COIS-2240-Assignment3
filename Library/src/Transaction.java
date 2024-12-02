@@ -1,6 +1,8 @@
 //Test for commits
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Transaction {
 	
@@ -47,5 +49,16 @@ public class Transaction {
     		instance = new Transaction();
     	}
     	return instance;
+    }
+    
+    public static void saveTransaction(String transDetails)
+    {
+    	try (FileWriter writer = new FileWriter("transactions.txt", true);){
+			writer.write(transDetails + System.lineSeparator());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }
 }
