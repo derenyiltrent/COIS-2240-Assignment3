@@ -1,8 +1,11 @@
-//Test for commits
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class Transaction {
 	
@@ -17,6 +20,7 @@ public class Transaction {
             member.borrowBook(book); 
             String transactionDetails = getCurrentDateTime() + " - Borrowing: " + member.getName() + " borrowed " + book.getTitle();
             System.out.println(transactionDetails);
+            saveTransaction(transactionDetails);
             return true;
         } else {
             System.out.println("The book is not available.");
@@ -31,6 +35,7 @@ public class Transaction {
             book.returnBook();
             String transactionDetails = getCurrentDateTime() + " - Returning: " + member.getName() + " returned " + book.getTitle();
             System.out.println(transactionDetails);
+            saveTransaction(transactionDetails);
         } else {
             System.out.println("This book was not borrowed by the member.");
         }
@@ -60,5 +65,27 @@ public class Transaction {
 			e.printStackTrace();
 		}
     	
+    }
+    
+    public static void displayTransactionHistory()
+    {
+    	File file = new File("transactions.txt");
+    	
+    	System.out.println("Transaction History");
+    	
+    	try(BufferedReader br = new BufferedReader(new FileReader(file)))
+    	{
+    		String printLine;
+    		;
+    		while((printLine = br.readLine()) != null)
+    		{
+    			System.out.printf(printLine);
+    			System.out.println();
+    		}
+    	}
+    	catch(IOException e)
+    	{
+    		System.out.println("Error reading transaction file");
+    	}
     }
 }
