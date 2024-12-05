@@ -1,6 +1,6 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Before;
+import java.lang.reflect.Constructor;
 
 public class LibraryManagementTest {
 	
@@ -10,14 +10,6 @@ public class LibraryManagementTest {
 	
 	private Member testMember;
 
-    @Before
-    public void initializingVar() throws Exception {
-        transaction = Transaction.getInstance();
-
-        testBook = new Book(100, "testName");
-
-        testMember = new Member(1, "testMemName");
-    }
 	
 	@Test
 	public void testBookId()
@@ -44,8 +36,14 @@ public class LibraryManagementTest {
 	
 	
 	@Test
-	public void testBorrowReturn()
+	public void testBorrowReturn() throws Exception
 	{
+        transaction = Transaction.getInstance();
+
+        testBook = new Book(100, "testName");
+
+        testMember = new Member(1, "testMemName");
+        
 			assertTrue("Book has been detected as availible initially", testBook.isAvailable());
 			
 			boolean success = transaction.borrowBook(testBook, testMember);
@@ -64,5 +62,14 @@ public class LibraryManagementTest {
 			assertFalse("Book is already availible, return should fail", returnFail);
 			assertTrue("Book should still be availible", testBook.isAvailable());
 		}
+	
+	@Test
+	public void testSingletonTransaction() throws Exception
+	{
+		Constructor<Transaction> constructor = Transaction.class.getDeclaredConstructor();
+		
+		int privateMod = constructor.getModifiers();
+		assertTrue("In order to enforce singleton behaviour, constructor should be false", (privateMod == 2));
+	}
 	}
 
