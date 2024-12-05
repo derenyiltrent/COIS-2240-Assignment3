@@ -3,10 +3,17 @@ public class Book {
     private String title;
     private boolean available;
 
-    public Book(int id, String title) {
+    public Book(int id, String title) throws Exception {
+    	if(isValidId(id))
+    	{
         this.id = id;
         this.title = title;
         this.available = true;
+    	}
+        else
+        {
+        throw new Exception("Book ID " + id + " is not valid!");
+        }
     }
 
     // Getter methods
